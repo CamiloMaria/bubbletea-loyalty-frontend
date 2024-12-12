@@ -16,7 +16,7 @@ export function Stats() {
                 const customers = await customersApi.getAll()
                 setStats({
                     totalCustomers: customers.length,
-                    activeCustomers: customers.filter(c => c.purchaseCount > 0).length,
+                    activeCustomers: customers.filter(c => c.purchaseCount > 0 && c.isActive).length,
                     freeDrinks: customers.filter(c => c.hasFreeDrink).length,
                 })
             } catch (error) {

@@ -20,12 +20,13 @@ export interface LoginCredentials {
 }
 
 export interface Customer {
-    id: string;
+    _id: string;
     name: string;
     email: string;
     qrCode: string;
     purchaseCount: number;
     hasFreeDrink: boolean;
+    isActive: boolean;
     createdAt: string;
     updatedAt: string;
 }

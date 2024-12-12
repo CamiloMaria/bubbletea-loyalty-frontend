@@ -73,7 +73,7 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
                                 {customers.map((customer) => (
-                                    <tr key={customer.id}>
+                                    <tr key={customer._id}>
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                                             <div className="flex items-center">
                                                 <div>
@@ -108,9 +108,9 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
-                                                    onClick={() => handleAddPurchase(customer.id)}
-                                                    isLoading={loadingStates[customer.id]}
-                                                    disabled={loadingStates[customer.id]}
+                                                    onClick={() => handleAddPurchase(customer._id)}
+                                                    isLoading={loadingStates[customer._id]}
+                                                    disabled={loadingStates[customer._id]}
                                                 >
                                                     <PlusIcon className="h-5 w-5" />
                                                 </Button>
@@ -118,9 +118,9 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        onClick={() => handleRedeemDrink(customer.id)}
-                                                        isLoading={loadingStates[customer.id]}
-                                                        disabled={loadingStates[customer.id]}
+                                                        onClick={() => handleRedeemDrink(customer._id)}
+                                                        isLoading={loadingStates[customer._id]}
+                                                        disabled={loadingStates[customer._id]}
                                                     >
                                                         <GiftIcon className="h-5 w-5 text-green-600" />
                                                     </Button>
