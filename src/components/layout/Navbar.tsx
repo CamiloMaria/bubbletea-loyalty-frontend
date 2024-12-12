@@ -16,7 +16,7 @@ export function Navbar() {
                 <div className="flex h-16 justify-between">
                     <div className="flex">
                         <div className="flex flex-shrink-0 items-center">
-                            <Link href="/dashboard">
+                            <Link href="/customers">
                                 <Image
                                     src="/logo.png"
                                     alt="Logo"

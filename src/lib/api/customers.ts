@@ -26,4 +26,9 @@ export const customersApi = {
         const { data } = await apiClient.put<Customer>(`/customers/${id}/redeem`);
         return data;
     },
+
+    async verifyQR(code: string) {
+        const { data } = await apiClient.get<Customer>(`/customers/verify/${code}`);
+        return data;
+    },
 };
