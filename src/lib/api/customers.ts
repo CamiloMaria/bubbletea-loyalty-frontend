@@ -3,7 +3,6 @@ import type { Customer, PurchaseHistory, FindCustomersParams, CustomersResponse 
 
 export const customersApi = {
     async getAll(params: FindCustomersParams = {}) {
-        debugger;
         const queryParams = new URLSearchParams();
         Object.entries(params || {}).forEach(([key, value]) => {
             if (value !== undefined && value !== null) {

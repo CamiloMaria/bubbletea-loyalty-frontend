@@ -3,12 +3,15 @@
 import { useAuth } from '@/lib/hooks/useAuth'
 import { Fragment } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
-import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { QrCodeIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState } from 'react'
+import { QRScannerModal } from '../customers/QRScannerModal'
 
 export function Navbar() {
     const { user, logout } = useAuth()
+    const [isQRScannerOpen, setIsQRScannerOpen] = useState(false)
 
     return (
         <nav className="bg-white shadow-sm border-b border-brand-100">
@@ -28,6 +31,12 @@ export function Navbar() {
                     </div>
 
                     <div className="flex items-center">
+                        <button
+                            onClick={() => setIsQRScannerOpen(true)}
+                            className="p-2 text-gray-500 hover:text-gray-700"
+                        >
+                            <QrCodeIcon className="h-6 w-6" />
+                        </button>
                         <Menu as="div" className="relative ml-3">
                             <MenuButton className="flex items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-300 focus:ring-offset-2">
                                 <span className="sr-only">Abrir menú de usuario</span>
@@ -70,6 +79,11 @@ export function Navbar() {
                     </div>
                 </div>
             </div>
+
+            <QRScannerModal
+                isOpen={isQRScannerOpen}
+                onClose={() => setIsQRScannerOpen(false)}
+            />
         </nav>
     )
 }

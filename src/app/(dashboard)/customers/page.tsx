@@ -49,7 +49,8 @@ export default function CustomersPage() {
     )
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+            {/* Header */}
             <div className="sm:flex sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold text-gray-900">
@@ -68,24 +69,32 @@ export default function CustomersPage() {
                 </div>
             </div>
 
+            {/* Stats */}
             <Stats />
 
-            <div className="mt-8">
+            {/* Search */}
+            <div className="mt-4 sm:mt-8">
                 <CustomersSearch onSearch={setSearchTerm} />
             </div>
 
-            {isLoading ? (
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-300" />
-                </div>
-            ) : (
-                <CustomersTable
-                    customers={filteredCustomers}
-                    onUpdate={loadCustomers}
-                />
-            )}
+            {/* Table Container */}
+            <div className="mt-4 sm:mt-8">
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-300" />
+                    </div>
+                ) : (
+                    <div className="-mx-4 sm:-mx-0">
+                        <CustomersTable
+                            customers={filteredCustomers}
+                            onUpdate={loadCustomers}
+                        />
+                    </div>
+                )}
+            </div>
 
-            <div className="mt-8">
+            {/* Pagination */}
+            <div className="mt-4 sm:mt-8">
                 <Pagination
                     currentPage={pagination.page}
                     totalPages={pagination.totalPages}
