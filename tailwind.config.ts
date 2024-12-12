@@ -1,6 +1,6 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
-export default {
+const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,20 +9,35 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        brand: {
+          50: '#FCEED9',
+          100: '#FCCBA2',
+          200: '#FDB167',
+          300: '#F99C41',
+        },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: '#F99C41',
+          foreground: '#ffffff',
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: '#FDB167',
+          foreground: '#ffffff',
         },
+        background: '#ffffff',
+        foreground: '#333333',
+        muted: {
+          DEFAULT: '#FCEED9',
+          foreground: '#666666',
+        },
+        accent: {
+          DEFAULT: '#FCCBA2',
+          foreground: '#333333',
+        },
+        border: '#FCCBA2',
       },
     },
   },
   plugins: [],
-} satisfies Config;
+}
+
+export default config

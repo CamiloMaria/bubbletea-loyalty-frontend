@@ -27,6 +27,7 @@ export interface Customer {
     purchaseCount: number;
     hasFreeDrink: boolean;
     createdAt: string;
+    updatedAt: string;
 }
 
 export interface Employee {

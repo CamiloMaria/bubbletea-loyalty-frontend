@@ -6,21 +6,8 @@ const apiClient = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true // Permite enviar cookies
 });
-
-// Interceptor de solicitud para agregar el token
-apiClient.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
 
 // Interceptor de respuesta para manejar errores
 apiClient.interceptors.response.use(
@@ -29,7 +16,6 @@ apiClient.interceptors.response.use(
         const message = error.response?.data?.message || 'Ha ocurrido un error';
 
         if (error.response?.status === 401) {
-            localStorage.removeItem('token');
             window.location.href = '/login';
             toast.error('Sesión expirada');
         } else {

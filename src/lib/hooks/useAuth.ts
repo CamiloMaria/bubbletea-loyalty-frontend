@@ -15,7 +15,7 @@ export const useAuth = create<AuthState>((set) => ({
     user: null,
     isAuthenticated: false,
     isLoading: true,
-    login: async (credentials: LoginCredentials) => {
+    login: async (credentials) => {
         try {
             const response = await authApi.login(credentials);
             set({
@@ -23,28 +23,33 @@ export const useAuth = create<AuthState>((set) => ({
                 isAuthenticated: true
             });
         } catch (error) {
-            set({ user: null, isAuthenticated: false });
-            throw error;
+            set({ user: null, isAuthenticated: false })
+            throw error
         }
     },
     logout: async () => {
-        await authApi.logout();
-        set({ user: null, isAuthenticated: false });
+        try {
+            await authApi.logout();
+            set({ user: null, isAuthenticated: false });
+            window.location.href = '/login';
+        } catch (error) {
+            console.error('Error during logout:', error)
+        }
     },
     checkAuth: async () => {
         try {
-            set({ isLoading: true });
-            const user = localStorage.getItem('user');
+            set({ isLoading: true })
+            const user = localStorage.getItem('user')
             if (user) {
                 set({
                     user: JSON.parse(user),
                     isAuthenticated: true
-                });
+                })
             }
         } catch {
-            set({ user: null, isAuthenticated: false });
+            set({ user: null, isAuthenticated: false })
         } finally {
-            set({ isLoading: false });
+            set({ isLoading: false })
         }
     },
-}));
+}))

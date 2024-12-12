@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from "next/navigation"
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { Label } from '../ui/Label'
 import { useAuth } from '@/lib/hooks/useAuth'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 
 interface FormErrors {
     email?: string
@@ -49,8 +49,8 @@ export function LoginForm() {
 
         try {
             await login({ email, password })
-            toast.success('¡Bienvenido!')
             router.push('/customers')
+            toast.success('¡Bienvenido!')
         } catch {
             setErrors({
                 email: ' ',
@@ -62,7 +62,7 @@ export function LoginForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-8 rounded-lg shadow-sm border border-brand-100">
             <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -91,7 +91,7 @@ export function LoginForm() {
 
             <Button
                 type="submit"
-                className="w-full"
+                className="w-full bg-brand-300 hover:bg-brand-200"
                 isLoading={isLoading}
             >
                 Iniciar sesión
@@ -101,7 +101,7 @@ export function LoginForm() {
             <div className="text-sm text-center">
                 <a
                     href="#"
-                    className="text-primary hover:text-primary/90"
+                    className="text-brand-300 hover:text-brand-200"
                     onClick={(e) => {
                         e.preventDefault()
                         toast.error('Funcionalidad no implementada')
