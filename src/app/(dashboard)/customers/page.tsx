@@ -1,35 +1,47 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Stats } from '@/components/dashboard/Stats'
 import { CustomersTable } from '@/components/customers/CustomersTable'
 import { Button } from '@/components/ui/Button'
-import { Customer } from '@/lib/types/api'
+import { Customer, CustomersResponse } from '@/lib/types/api'
 import { customersApi } from '@/lib/api/customers'
 import Link from 'next/link'
-import { Input } from '@/components/ui/Input'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { CustomersSearch } from '@/components/customers/CustomersSearch'
+import { Pagination } from '@/components/ui/Pagination'
 
 export default function CustomersPage() {
     const [customers, setCustomers] = useState<Customer[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState({
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+    })
 
-    const loadCustomers = async () => {
+    const loadCustomers = useCallback(async () => {
         try {
             setIsLoading(true)
-            const data = await customersApi.getAll()
-            setCustomers(data)
+            const response: CustomersResponse = await customersApi.getAll({
+                search: searchTerm,
+                page,
+                limit: 10,
+            })
+            setCustomers(response.data)
+            setPagination(response.pagination)
         } catch {
             // El error ya es manejado por el interceptor
         } finally {
             setIsLoading(false)
         }
-    }
+    }, [page, searchTerm])
 
     useEffect(() => {
         loadCustomers()
-    }, [])
+    }, [loadCustomers])
 
     const filteredCustomers = customers.filter(customer =>
         customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -58,21 +70,8 @@ export default function CustomersPage() {
 
             <Stats />
 
-            <div className="mt-4">
-                <div className="max-w-sm">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <Input
-                            type="text"
-                            placeholder="Buscar clientes..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10"
-                        />
-                    </div>
-                </div>
+            <div className="mt-8">
+                <CustomersSearch onSearch={setSearchTerm} />
             </div>
 
             {isLoading ? (
@@ -85,6 +84,14 @@ export default function CustomersPage() {
                     onUpdate={loadCustomers}
                 />
             )}
+
+            <div className="mt-8">
+                <Pagination
+                    currentPage={pagination.page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={setPage}
+                />
+            </div>
         </div>
     )
 }

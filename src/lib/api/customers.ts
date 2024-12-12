@@ -1,9 +1,17 @@
 import apiClient from './axios';
-import type { Customer, PurchaseHistory } from '../types/api';
+import type { Customer, PurchaseHistory, FindCustomersParams, CustomersResponse } from '../types/api';
 
 export const customersApi = {
-    async getAll() {
-        const { data } = await apiClient.get<Customer[]>('/customers');
+    async getAll(params: FindCustomersParams = {}) {
+        debugger;
+        const queryParams = new URLSearchParams();
+        Object.entries(params || {}).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                queryParams.append(key, value.toString());
+            }
+        });
+
+        const { data } = await apiClient.get<CustomersResponse>(`/customers?${queryParams.toString()}`);
         return data;
     },
 

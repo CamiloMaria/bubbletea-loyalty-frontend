@@ -40,6 +40,24 @@ export interface Customer {
     updatedAt: string;
 }
 
+export interface CustomersResponse {
+    data: Customer[];
+    pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+    };
+}
+
+export interface FindCustomersParams {
+    search?: string;
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+}
+
 export interface Employee {
     id: string;
     name: string;

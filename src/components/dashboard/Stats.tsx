@@ -15,9 +15,9 @@ export function Stats() {
             try {
                 const customers = await customersApi.getAll()
                 setStats({
-                    totalCustomers: customers.length,
-                    activeCustomers: customers.filter(c => c.totalPurchases > 0 && c.isActive).length,
-                    freeDrinks: customers.filter(c => c.hasFreeDrink).length,
+                    totalCustomers: customers.pagination.total,
+                    activeCustomers: customers.data.filter(c => c.totalPurchases > 0 && c.isActive).length,
+                    freeDrinks: customers.data.filter(c => c.hasFreeDrink).length,
                 })
             } catch (error) {
                 console.error('Error loading stats:', error)
