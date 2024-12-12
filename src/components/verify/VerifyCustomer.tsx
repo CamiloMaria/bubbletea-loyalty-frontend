@@ -87,7 +87,7 @@ export default function VerifyCustomer({ code }: { code: string }) {
                     <div className="mt-6 space-y-4">
                         <div className="bg-brand-50 rounded-lg p-4">
                             <p className="text-lg font-medium text-gray-900">
-                                Compras realizadas: {customer.purchaseCount}
+                                Compras realizadas: {customer.totalPurchases}
                             </p>
                             <p className="text-sm text-gray-600">
                                 {customer.hasFreeDrink ? (
@@ -95,7 +95,7 @@ export default function VerifyCustomer({ code }: { code: string }) {
                                         ¡Bebida gratis disponible!
                                     </span>
                                 ) : (
-                                    `${customer.purchaseCount % 10} de 10 para bebida gratis`
+                                    `${customer.totalPurchases % 10} de 10 para bebida gratis`
                                 )}
                             </p>
                         </div>

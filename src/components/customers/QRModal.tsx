@@ -5,6 +5,7 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@
 import { QRCodeSVG } from 'qrcode.react'
 import { Customer } from '@/lib/types/api'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { PurchaseProgress } from './PurchaseProgress'
 
 interface QRModalProps {
     customer: Customer | null
@@ -67,17 +68,23 @@ export function QRModal({ customer, isOpen, onClose }: QRModalProps) {
                                             />
                                         </div>
                                         <div className="mt-4 text-center">
-                                            <p className="text-sm font-medium text-gray-900">
-                                                Código: {customer.qrCode}
-                                            </p>
-                                            <p className="text-sm text-gray-500">
-                                                Compras: {customer.purchaseCount}
-                                            </p>
-                                            {customer.hasFreeDrink && (
-                                                <p className="text-sm text-green-600 font-medium mt-1">
-                                                    ¡Bebida gratis disponible!
-                                                </p>
-                                            )}
+                                            <div className="flex flex-col items-center space-y-2">
+                                                {customer.hasFreeDrink ? (
+                                                    <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">
+                                                        ¡Bebida Gratis Disponible!
+                                                    </span>
+                                                ) : (
+                                                    <div className="flex flex-col items-center">
+                                                        <PurchaseProgress
+                                                            totalPurchases={customer.totalPurchases}
+                                                            size="lg"
+                                                        />
+                                                        <p className="mt-2 text-sm text-gray-500">
+                                                            {10 - (customer.totalPurchases % 10)} compras más para bebida gratis
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

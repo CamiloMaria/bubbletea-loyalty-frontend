@@ -32,7 +32,7 @@ export interface Customer {
     name: string;
     email: string;
     qrCode: string;
-    purchaseCount: number;
+    totalPurchases: number;
     hasFreeDrink: boolean;
     isActive: boolean;
     history?: PurchaseHistory[];
