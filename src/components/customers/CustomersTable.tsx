@@ -2,13 +2,14 @@
 
 import { useState } from 'react'
 import { Customer } from '@/lib/types/api'
-import { QrCodeIcon, PlusIcon, GiftIcon } from '@heroicons/react/24/outline'
+import { QrCodeIcon, PlusIcon, GiftIcon, ClockIcon } from '@heroicons/react/24/outline'
 import { Button } from '../ui/Button'
 import { formatDate } from '@/lib/utils'
 import { customersApi } from '@/lib/api/customers'
 import toast from 'react-hot-toast'
 import { QRModal } from './QRModal'
-
+import { PurchaseHistory as PurchaseHistoryType } from '@/lib/types/api'
+import { PurchaseHistoryModal } from './PurchaseHistoryModal'
 interface CustomersTableProps {
     customers: Customer[]
     onUpdate: () => void
@@ -18,6 +19,18 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
     const [loadingStates, setLoadingStates] = useState<{ [key: string]: boolean }>({})
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
     const [isQRModalOpen, setIsQRModalOpen] = useState(false)
+    const [selectedCustomerHistory, setSelectedCustomerHistory] = useState<PurchaseHistoryType[]>([])
+    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false)
+
+    const handleShowHistory = async (customerId: string) => {
+        try {
+            const history = await customersApi.getPurchaseHistory(customerId)
+            setSelectedCustomerHistory(history)
+            setIsHistoryModalOpen(true)
+        } catch {
+            // Error manejado por el interceptor
+        }
+    }
 
     const setLoading = (customerId: string, loading: boolean) => {
         setLoadingStates(prev => ({ ...prev, [customerId]: loading }))
@@ -137,6 +150,13 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
+                                                        onClick={() => handleShowHistory(customer._id)}
+                                                    >
+                                                        <ClockIcon className="h-5 w-5" />
+                                                    </Button>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
                                                         onClick={() => handleShowQRModal(customer)}
                                                     >
                                                         <QrCodeIcon className="h-5 w-5" />
@@ -150,7 +170,7 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>=
 
             <QRModal
                 customer={selectedCustomer}
@@ -159,6 +179,12 @@ export function CustomersTable({ customers, onUpdate }: CustomersTableProps) {
                     setIsQRModalOpen(false)
                     setSelectedCustomer(null)
                 }}
+            />
+
+            <PurchaseHistoryModal
+                isOpen={isHistoryModalOpen}
+                onClose={() => setIsHistoryModalOpen(false)}
+                history={selectedCustomerHistory}
             />
         </>
     )

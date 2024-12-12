@@ -1,5 +1,5 @@
 import apiClient from './axios';
-import type { Customer } from '../types/api';
+import type { Customer, PurchaseHistory } from '../types/api';
 
 export const customersApi = {
     async getAll() {
@@ -31,4 +31,9 @@ export const customersApi = {
         const { data } = await apiClient.get<Customer>(`/customers/verify/${code}`);
         return data;
     },
+
+    async getPurchaseHistory(id: string) {
+        const { data } = await apiClient.get<PurchaseHistory[]>(`/customers/${id}/history`);
+        return data;
+    }
 };

@@ -19,6 +19,14 @@ export interface LoginCredentials {
     password: string;
 }
 
+export interface PurchaseHistory {
+    _id: string;
+    customerId: string;
+    type: 'PURCHASE' | 'REDEEM';
+    employeeName: string;
+    createdAt: string;
+}
+
 export interface Customer {
     _id: string;
     name: string;
@@ -27,6 +35,7 @@ export interface Customer {
     purchaseCount: number;
     hasFreeDrink: boolean;
     isActive: boolean;
+    history?: PurchaseHistory[];
     createdAt: string;
     updatedAt: string;
 }

@@ -18,7 +18,7 @@ export default function VerifyCustomer({ code }: { code: string }) {
         try {
             setProcessing(true)
             await customersApi.addPurchase(customer._id)
-            await verifyCustomer() // Recargar los datos del cliente
+            await verifyCustomer()
             toast.success('Compra registrada correctamente')
         } catch {
             // Error ya manejado por el interceptor
@@ -76,6 +76,7 @@ export default function VerifyCustomer({ code }: { code: string }) {
             </div>
         )
     }
+
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="max-w-md w-full bg-white shadow rounded-lg p-6">

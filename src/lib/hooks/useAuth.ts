@@ -39,13 +39,11 @@ export const useAuth = create<AuthState>((set) => ({
     checkAuth: async () => {
         try {
             set({ isLoading: true })
-            const user = localStorage.getItem('user')
-            if (user) {
-                set({
-                    user: JSON.parse(user),
-                    isAuthenticated: true
-                })
-            }
+            const user = await authApi.getProfile()
+            set({
+                user,
+                isAuthenticated: true
+            })
         } catch {
             set({ user: null, isAuthenticated: false })
         } finally {
