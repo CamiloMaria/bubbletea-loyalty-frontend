@@ -3,10 +3,10 @@ import { toast } from 'react-hot-toast';
 
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
+    withCredentials: true,  // Importante para enviar cookies
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true // Permite enviar cookies
 });
 
 // Interceptor de respuesta para manejar errores
