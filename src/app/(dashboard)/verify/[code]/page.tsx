@@ -1,6 +1,12 @@
 import VerifyCustomer from '../../../../components/verify/VerifyCustomer'
 
-export default async function VerifyPage({ params }: { params: { code: string } }) {
-    const code = await Promise.resolve(params.code)
-    return <VerifyCustomer code={code} />
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function VerifyPage({ params }: any) {
+    return <VerifyCustomer code={params.code} />
+}
+
+export async function generateStaticParams() {
+    return []
 }

@@ -7,7 +7,8 @@ import { GiftIcon, CheckCircleIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 
-export default function VerifyCustomer({ code }: { code: string }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function VerifyCustomer({ code }: any) {
     const [customer, setCustomer] = useState<Customer | null>(null)
     const [loading, setLoading] = useState(true)
     const [processing, setProcessing] = useState(false)
