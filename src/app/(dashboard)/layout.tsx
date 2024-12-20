@@ -1,11 +1,20 @@
-import * as React from 'react';
-import { Navbar } from '../../components/layout/Navbar'
+'use client';
+
+import { useEffect } from 'react';
+import { useAuth } from '@/lib/hooks/useAuth';
+import { Navbar } from '@/components/layout/Navbar';
 
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    const { checkAuth } = useAuth();
+
+    useEffect(() => {
+        checkAuth();
+    }, [checkAuth]);
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Navbar />

@@ -6,11 +6,12 @@ export interface ApiResponse<T> {
 
 export interface LoginResponse {
     access_token: string;
-    employee: {
-        id: string;
+    user: {
+        _id: string;
         email: string;
         name: string;
         role: string;
+        type: string;
     };
 }
 
@@ -25,6 +26,14 @@ export interface PurchaseHistory {
     type: 'PURCHASE' | 'REDEEM';
     employeeName: string;
     createdAt: string;
+}
+
+export interface Profile {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    isActive: boolean;
 }
 
 export interface Customer {

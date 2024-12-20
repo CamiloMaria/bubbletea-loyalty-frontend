@@ -48,9 +48,15 @@ export function LoginForm() {
         }
 
         try {
-            await login({ email, password })
-            router.push('/customers')
+            const response = await login({ email, password })
             toast.success('¡Bienvenido!')
+
+            // Redirigir según el rol del usuario
+            if (response?.user?.role === 'ADMIN') {
+                router.push('/dashboard')
+            } else {
+                router.push('/customers')
+            }
         } catch {
             setErrors({
                 email: ' ',

@@ -1,5 +1,5 @@
 import apiClient from './axios';
-import type { LoginCredentials, LoginResponse } from '../types/api';
+import type { LoginCredentials, LoginResponse, Profile } from '../types/api';
 
 export const authApi = {
     async login(credentials: LoginCredentials) {
@@ -13,7 +13,7 @@ export const authApi = {
     },
 
     async getProfile() {
-        const { data } = await apiClient.get('/auth/profile');
+        const { data } = await apiClient.get<Profile>('/auth/profile');
         return data;
     },
 

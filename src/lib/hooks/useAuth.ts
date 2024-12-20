@@ -1,12 +1,12 @@
 import { create } from 'zustand';
 import { authApi } from '../api/auth';
-import { Employee, LoginCredentials } from '../types/api';
+import { Employee, LoginCredentials, LoginResponse } from '../types/api';
 
 interface AuthState {
     user: Employee | null;
     isAuthenticated: boolean;
     isLoading: boolean;
-    login: (credentials: LoginCredentials) => Promise<void>;
+    login: (credentials: LoginCredentials) => Promise<LoginResponse>;
     logout: () => Promise<void>;
     checkAuth: () => Promise<void>;
 }
@@ -19,9 +19,13 @@ export const useAuth = create<AuthState>((set) => ({
         try {
             const response = await authApi.login(credentials);
             set({
-                user: response.employee,
+                user: {
+                    ...response.user,
+                    id: response.user._id,
+                },
                 isAuthenticated: true
             });
+            return response; 
         } catch (error) {
             set({ user: null, isAuthenticated: false })
             throw error
@@ -41,7 +45,10 @@ export const useAuth = create<AuthState>((set) => ({
             set({ isLoading: true })
             const user = await authApi.getProfile()
             set({
-                user,
+                user: {
+                    ...user,
+                    id: user._id,
+                },
                 isAuthenticated: true
             })
         } catch {

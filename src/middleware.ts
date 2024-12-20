@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    // Obtener la cookie de autenticación
     const authToken = request.cookies.get('auth_token')?.value;
+    const userRole = request.cookies.get('user_role')?.value;
     const currentPath = request.nextUrl.pathname;
 
     // Rutas públicas que no requieren autenticación
@@ -18,24 +18,24 @@ export function middleware(request: NextRequest) {
 
     // Si hay token y el usuario intenta acceder a login
     if (authToken && currentPath === '/login') {
-        const dashboardUrl = new URL('/customers', request.url);
-        return NextResponse.redirect(dashboardUrl);
+        const redirectUrl = new URL(
+            userRole === 'ADMIN' ? '/dashboard' : '/customers',
+            request.url
+        );
+        return NextResponse.redirect(redirectUrl);
+    }
+
+    // Proteger rutas de admin
+    if (currentPath.startsWith('/dashboard') && userRole !== 'ADMIN') {
+        const customerUrl = new URL('/customers', request.url);
+        return NextResponse.redirect(customerUrl);
     }
 
     return NextResponse.next();
 }
 
-// Configurar las rutas que el middleware debe procesar
 export const config = {
     matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         * - public folder
-         */
         '/((?!api|_next/static|_next/image|favicon.ico|logo.png).*)',
     ],
 };

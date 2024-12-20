@@ -11,6 +11,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-progress": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
@@ -21,6 +22,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
+    "react-qr-code": "^2.0.15",
     "swr": "^2.2.5",
     "tailwind-merge": "^2.5.5",
     "zustand": "^5.0.2"
