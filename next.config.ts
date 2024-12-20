@@ -10,9 +10,6 @@ const withPWA = NextPWA({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
-  experimental: {
-    serverActions: true,
-  },
   // Asegúrate de que todas las rutas estén correctamente configuradas
   async redirects() {
     return []
