@@ -19,12 +19,10 @@ export const useAuth = create<AuthState>((set) => ({
         try {
             const response = await authApi.login(credentials);
             set({
-                user: {
-                    ...response.user,
-                    id: response.user._id,
-                },
+                user: response.user,
                 isAuthenticated: true
             });
+            console.log('response', response)
             return response; 
         } catch (error) {
             set({ user: null, isAuthenticated: false })

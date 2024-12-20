@@ -1,105 +1,106 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
-import LoyaltyCard from '@/components/dashboard/LoyaltyCard';
-import { customersApi } from '@/lib/api/customers';
-import type { Customer } from '@/lib/types/api';
-import { useAuth } from '@/lib/hooks/useAuth';
+import { useEffect, useState, useCallback } from 'react'
+import { Stats } from '@/components/dashboard/Stats'
+import { CustomersTable } from '@/components/customers/CustomersTable'
+import { Button } from '@/components/ui/Button'
+import { Customer, CustomersResponse } from '@/lib/types/api'
+import { customersApi } from '@/lib/api/customers'
+import Link from 'next/link'
+import { CustomersSearch } from '@/components/customers/CustomersSearch'
+import { Pagination } from '@/components/ui/Pagination'
 
-export default function Home() {
-    const { user, isLoading: isAuthLoading, checkAuth } = useAuth();
-    const [profileData, setProfileData] = useState<Customer | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export default function CustomersPage() {
+    const [customers, setCustomers] = useState<Customer[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [searchTerm, setSearchTerm] = useState('')
+    const [page, setPage] = useState(1)
+    const [pagination, setPagination] = useState({
+        total: 0,
+        page: 1,
+        limit: 10,
+        totalPages: 0,
+    })
+
+    const loadCustomers = useCallback(async () => {
+        try {
+            setIsLoading(true)
+            const response: CustomersResponse = await customersApi.getAll({
+                search: searchTerm,
+                page,
+                limit: 10,
+            })
+            setCustomers(response.data)
+            setPagination(response.pagination)
+        } catch {
+            // El error ya es manejado por el interceptor
+        } finally {
+            setIsLoading(false)
+        }
+    }, [page, searchTerm])
 
     useEffect(() => {
-        checkAuth();
-    }, [checkAuth]);
+        loadCustomers()
+    }, [loadCustomers])
 
-    useEffect(() => {
-        async function loadProfileData() {
-            if (!user?.id) return;
-
-            try {
-                setLoading(true);
-                const customerData = await customersApi.getOne(user.id);
-                setProfileData(customerData);
-            } catch (err) {
-                setError('Error al cargar los datos del perfil');
-                console.error('Error loading profile:', err);
-            } finally {
-                setLoading(false);
-            }
-        }
-
-        if (user) {
-            loadProfileData();
-        }
-    }, [user]);
-
-    if (isAuthLoading || loading) {
-        return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex items-center justify-center min-h-[400px]">
-                    <div className="text-gray-600">Cargando perfil...</div>
-                </div>
-            </div>
-        );
-    }
-
-    if (!user) {
-        return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-                    No has iniciado sesión
-                </div>
-            </div>
-        );
-    }
-
-    if (error || !profileData) {
-        return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
-                    {error || 'No se pudo cargar el perfil'}
-                </div>
-            </div>
-        );
-    }
+    const filteredCustomers = customers.filter(customer =>
+        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold mb-6">Mi Perfil de Fidelidad</h1>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="col-span-1">
-                    <LoyaltyCard
-                        userId={profileData._id}
-                        currentDrinks={profileData.totalPurchases}
-                        drinksForReward={10}
-                    />
+        <div className="space-y-6 p-4 sm:p-6 lg:p-8">
+            {/* Header */}
+            <div className="sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <h1 className="text-2xl font-semibold text-gray-900">
+                        Clientes
+                    </h1>
+                    <p className="mt-2 text-sm text-gray-700">
+                        Gestiona tus clientes y su programa de fidelización
+                    </p>
                 </div>
-
-                <div className="col-span-1 bg-white rounded-lg shadow-lg p-6">
-                    <h2 className="text-xl font-semibold mb-4">Resumen de Fidelidad</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <p className="text-gray-600">Bebidas compradas</p>
-                            <p className="text-2xl font-bold">{profileData.totalPurchases}</p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600">Bebidas para próxima recompensa</p>
-                            <p className="text-2xl font-bold">
-                                {Math.max(0, 10 - profileData.totalPurchases)}
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-gray-600">Bebida gratis disponible</p>
-                            <p className="text-2xl font-bold">{profileData.hasFreeDrink ? 'Si' : 'No'}</p>
-                        </div>
-                    </div>
+                <div className="mt-4 sm:mt-0">
+                    <Button asChild>
+                        <Link href="/customers/new">
+                            Nuevo Cliente
+                        </Link>
+                    </Button>
                 </div>
             </div>
+
+            {/* Stats */}
+            <Stats />
+
+            {/* Search */}
+            <div className="mt-4 sm:mt-8">
+                <CustomersSearch onSearch={setSearchTerm} />
+            </div>
+
+            {/* Table Container */}
+            <div className="mt-4 sm:mt-8">
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-300" />
+                    </div>
+                ) : (
+                    <div className="-mx-4 sm:-mx-0">
+                        <CustomersTable
+                            customers={filteredCustomers}
+                            onUpdate={loadCustomers}
+                        />
+                    </div>
+                )}
+            </div>
+
+            {/* Pagination */}
+            <div className="mt-4 sm:mt-8">
+                <Pagination
+                    currentPage={pagination.page}
+                    totalPages={pagination.totalPages}
+                    onPageChange={setPage}
+                />
+            </div>
         </div>
-    );
-} 
+    )
+}

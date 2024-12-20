@@ -7,7 +7,7 @@ export interface ApiResponse<T> {
 export interface LoginResponse {
     access_token: string;
     user: {
-        _id: string;
+        id: string;
         email: string;
         name: string;
         role: string;
